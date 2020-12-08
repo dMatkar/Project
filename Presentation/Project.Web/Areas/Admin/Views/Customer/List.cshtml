@@ -1,0 +1,263 @@
+﻿@model Project.Web.Areas.Admin.Models.Customers.CustomerList
+@{
+    ViewBag.Title = "Index";
+    Html.SetActiveSystemName("Products list");
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <section class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Admin.Products.Products")
+        </h1>
+        <div class="pull-right">
+            <a href="@Html.Raw(Url.Action("Create","Customer"))" class="btn bg-blue">  <i class="fa fa-plus-square"></i> @T("Admin.Common.Add")</a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success">@T("Admin.Common.Export")</button>
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <button type="submit" name="exportexcel-All">
+                            <i class="fa fa-file-excel-o"></i>
+                            @T("Admin.Common.Export.All")
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" id="exportexcel-selected">
+                            <i class="fa fa-file-excel-o"></i>
+                            @T("Admin.Common.Export.Selected")
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-header with-border box-toggle">
+                        <i class="fa fa-search"></i>
+                        <h3 class="box-title">@T("Admin.Common.Search")</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            @Html.LabelFor(model => model.SearchFirstName)
+                                        </div>
+                                        <div class="col-md-8">
+                                            @Html.ProjectTextBoxFor(model => model.SearchFirstName)
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            @Html.LabelFor(model => model.SearchLastName)
+                                        </div>
+                                        <div class="col-md-8">
+                                            @Html.ProjectTextBoxFor(model => model.SearchLastName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            @Html.LabelFor(model => model.SearchMobileNumber)
+                                        </div>
+                                        <div class="col-md-8">
+                                            @Html.ProjectTextBoxFor(model => model.SearchMobileNumber)
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            @Html.LabelFor(model => model.SearchEmail)
+                                        </div>
+                                        <div class="col-md-8">
+                                            @Html.ProjectTextBoxFor(model => model.SearchEmail)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7 col-md-offset-5">
+                                    <button type="button" class="btn btn-primary btn-search" id="search-Products">@T("Admin.Common.Search")</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel p">
+                    <div class="box-body">
+                        <div id="example">
+                            <div id="CategoryGrid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+@using (Html.BeginForm("ExportExcelSelected", "Customer",FormMethod.Post, new { id = "export-excel-selected-form" }))
+{
+    <input type="hidden" value="" id="selectedIds" name="selectedIds" />
+}
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            let selectedIds = [];
+
+          $("#CategoryGrid").kendoGrid({
+                dataSource: {
+                    dataType: "json",
+                    transport: {
+                        read: {
+                            url: "@Html.Raw(Url.Action("CustomersList", "Customer"))",
+                            type: "post",
+                            dataType: "json",
+                            data: additionalData
+                        }
+                    },
+                    schema: {
+                        data: "Data",
+                        total: "Total",
+                    },
+                    errors: function (e) {
+                        display_kendo_errors(e);
+                    },
+                    pageSize: 5,
+                    serverPaging: true,
+                    serverFiltering: true,
+                    serverSorting: true
+                },
+                scrollable: false,
+                pageable: {
+                    refresh: true,
+                    pageSizes: [5, 10, 15, 20],
+                },
+                dataBound: onDataBound,
+                columns: [
+                    {
+                    field: "Id",
+                    headerTemplate:'<input type="checkbox" id="mastercheckbox">',
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                    template: '<input type="checkbox" class="checkboxgroups" value="#=Id#">',
+                    width:50
+                    },
+                {
+                    field: "FullName",
+                    title: "@T("Admin.Products.Products.Fields.FullName")"
+                },{
+                    field: "MobileNumber",
+                    title: "@T("Admin.Products.Products.Fields.MobileNumber")",
+                },
+                {
+                    field: "Email",
+                    title: "@T("Admin.Products.Products.Fields.Email")"
+                },
+                {
+                    field: "CreatedOnUtc",
+                    title: "@T("Admin.Products.Products.Fields.CreatedOn")",
+                    type: "date",
+                    format: "{0:G}"
+                },
+                {
+                    field: "Id",
+                    title: "@T("Admin.Common.Edit")",
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                    template:'<a class="btn btn-info" href="@Url.Action("Edit","Customer")/#=Id#">Edit</a>'
+                }
+            ]
+         });
+
+           $("".concat("#@Html.FieldIdFor(model => model.SearchEmail),",
+          "#@Html.FieldIdFor(model => model.SearchFirstName),",
+          "#@Html.FieldIdFor(model => model.SearchLastName),",
+          "#@Html.FieldIdFor(model => model.SearchMobileNumber)")).keydown(function(e)
+          {
+              if (e.keyCode == 13) {
+                  $('#search-Products').click();
+                  e.preventDefault();
+              }
+        });
+
+            $('#search-Products').click(function (e) {
+                e.preventDefault();
+                var grid = $('#CategoryGrid').data('kendoGrid');
+                grid.dataSource.page(1);
+                $('.checkboxGroups').attr('checked', false).change();
+                selectedIds = [];
+            });
+
+            $('#mastercheckbox').click(function () {
+                $('.checkboxgroups').prop('checked', $(this).is(":checked")).change();
+            });
+
+            $('#CategoryGrid').on('change', ':checkbox[id!="mastercheckbox"][class="checkboxgroups"]', function () {
+                let $check = $(this);
+                let searchedValue = jQuery.inArray($check.val(), selectedIds);
+                if ($check.is(":checked")) {
+                    if (searchedValue == -1) {
+                        selectedIds.push($check.val());
+                    }
+                }
+                else {
+                    if (searchedValue > -1) {
+                        selectedIds = jQuery.grep(selectedIds, (element, index) => element !== $check.val());
+                    }
+                }
+                UpdateMasterCheckbox();
+         });
+
+            function additionalData() {
+                let data =
+                {
+                    SearchFirstName : $('#@Html.FieldIdFor(model => model.SearchFirstName)').val(),
+                    SearchLastName : $('#@Html.FieldIdFor(model => model.SearchLastName)').val(),
+                    SearchMobileNumber : $('#@Html.FieldIdFor(model => model.SearchMobileNumber)').val(),
+                    SearchEmail : $('#@Html.FieldIdFor(model => model.SearchEmail)').val()
+                }
+                addAntiForgeryToken(data);
+                return data;
+            }
+
+            function UpdateMasterCheckbox() {
+              let numOfCheckboxes = $(':checkbox[id!="mastercheckbox"][class="checkboxgroups"]').length;
+              let numOfCheckboxesChecked = $(':checkbox[id!="mastercheckbox"][class="checkboxgroups"]:checked').length;
+              $(":checkbox[id='mastercheckbox']").prop('checked', numOfCheckboxes == numOfCheckboxesChecked);
+            }
+
+            function onDataBound(e) {
+                $(':checkbox[id!="mastercheckbox"][class="checkboxgroups"]', '#CategoryGrid').each(function () {
+                    var currentId = $(this).val();
+                    var checked = jQuery.inArray(currentId, selectedIds);
+                    $(this).prop('checked', checked > -1);
+                });
+            }
+
+            //export to excel
+            $('#exportexcel-selected').click(function (e) {
+                e.preventDefault();
+                $('#selectedIds').val(selectedIds.toString());
+                $('#export-excel-selected-form').submit();
+            });
+});
+    </script>
+}

@@ -1,0 +1,53 @@
+﻿@using Project.Web.Framework.Menu
+@{
+    XmlSiteMap siteMap = new XmlSiteMap();
+    siteMap.LoadFrom("~/Areas/Admin/SiteMap.xml");
+}
+
+@helper RenderMenuItem(Project.Web.Framework.Menu.SiteMapNode siteMap)
+{
+    string url = null;
+    bool isActive = siteMap.ContainsSystemName(Html.GetActiveSystemName());
+
+    if (!string.IsNullOrWhiteSpace(siteMap.Controller) && !string.IsNullOrWhiteSpace(siteMap.Action))
+    {
+        url = Url.Action(siteMap.Action, siteMap.Controller);
+    }
+
+    if (siteMap.ChildNodes.IsValueCreated && siteMap.ChildNodes.Value.Any())
+    {
+        <li class="treeview @(isActive ? "active": "" )">
+            <a href="">
+                <i class="fa @Html.Raw(siteMap.IconClass)"></i> <span>@siteMap.SystemName</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                @foreach (var item in siteMap.ChildNodes.Value)
+                {
+                    @RenderMenuItem(item)
+                }
+            </ul>
+        </li>
+    }
+    else
+    {
+        <li class="@(isActive ? "active":"")">
+            <a href="@Html.Raw(url)">
+                <i class="fa @Html.Raw(siteMap.IconClass)"></i> <span>@siteMap.SystemName</span>
+            </a>
+        </li>
+    }
+}
+
+<ul class="sidebar-menu" data-widget="tree">
+    @if (siteMap.RootNode.ChildNodes.IsValueCreated)
+    {
+        foreach (var item in siteMap.RootNode.ChildNodes.Value)
+        {
+            @RenderMenuItem(item)
+        }
+    }
+</ul>
+

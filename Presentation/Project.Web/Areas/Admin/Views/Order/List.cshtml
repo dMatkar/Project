@@ -1,0 +1,402 @@
+﻿@model Project.Web.Areas.Admin.Models.Orders.OrderModel
+
+@{
+    ViewBag.Title = "List";
+}
+
+<div class="alert alert-danger alert-dismissible hidden">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <i class="icon fas fa-ban"></i>
+    <span class="msg"></span>
+</div>
+<div class="alert alert-info alert-dismissible hidden">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <i class="icon fas fa-ban"></i>
+    <span class="msg1"></span>
+</div>
+<section class="content-header clearfix">
+    <h1 class="pull-left">
+        @T("Admin.Orders.Orders")
+    </h1>
+    <div class="pull-right">
+        <a href="@Html.Raw(Url.Action("Create","Customer"))" class="btn bg-blue">  <i class="fa fa-first-order"></i> @T("Admin.Common.Order.Place")</a>
+        <a href="@Html.Raw(Url.Action("Create","Customer"))" class="btn btn-danger">  <i class="fa fa-remove"></i> @T("Admin.Common.Delete.Cart")</a>
+    </div>
+</section>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-header with-border box-toggle">
+                        <i class="fa fa-info"></i>
+                        <h3 class="box-title">@T("Admin.Orders.Customer.Info")</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" style="width:100%;" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Name)
+                                    <select class="form-control select2" id="Name" name="Name">
+                                    </select>
+                                    <span class="text-danger hidden validationMsg"></span>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Address)
+                                    @Html.ProjectTextAreaFor(model => model.Address, new { rows = "4", @readonly = "readonly" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.InvoiceNumber)
+                                        @Html.ProjectTextBoxFor(model => model.InvoiceNumber, new { @readonly = "readonly" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.InvoiceDate)
+                                        @Html.ProjectTextBoxFor(model => model.InvoiceDate, new { @readonly = "readonly" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel">
+                    <div class="box-body">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CartItems.ProductName)
+                                    <select class="form-control select2" id="CartItems_ProductName" name="CartItems_ProductName">
+                                    </select>
+                                    <span class="text-danger hidden validationMsg"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CartItems.Quantity)
+                                    <div class="input-group">
+                                        @Html.ProjectTextBoxFor(model => model.CartItems.Quantity)
+                                        <div class="input-group-addon bg-gray" id="Measurement">
+                                            @Model.CartItems.UnitOfMeasurement
+                                        </div>
+                                    </div>
+                                    <span class="text-danger hidden validationMsg"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CartItems.Price)
+                                    @Html.ProjectTextBoxFor(model => model.CartItems.Price, new { @readonly = "readonly" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CartItems.CurrentStockQuantity)
+                                    @Html.ProjectTextBoxFor(model => model.CartItems.CurrentStockQuantity, new { @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7 col-md-offset-5">
+                            <button type="button" class="btn btn-primary" id="AddToCart" name="insertItem">@T("Admin.Common.AddToCart")</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="panel">
+                    <div class="box-body">
+                        <div id="example">
+                            <div id="OrderGrid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="panel">
+                    <div class="box-body">
+                        <div class="col-md-6 col-md-offset-6">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.GrandTotal)
+                                    @Html.ProjectTextBoxFor(model => model.GrandTotal, new { @readonly = "readonly" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.TotalPayment)
+                                    @Html.ProjectTextBoxFor(model => model.TotalPayment)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PaymentDue)
+                                    @Html.ProjectTextBoxFor(model => model.PaymentDue, new { @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            var processRequest = false;
+            $("#OrderGrid").kendoGrid({
+                dataSource: {
+                    dataType: "json",
+                    transport: {
+                        read: {
+                              url: "@Html.Raw(Url.Action("CartList", "Order"))",
+                              type: "post",
+                             cache:false,
+                             dataType: "json",
+                             data: addGridData
+                        }
+                    },
+                    schema: {
+                        data: "Data",
+                        total: "Total",
+                    },
+                    errors: function (e) {
+                        display_kendo_errors(e);
+                    },
+                    pageSize: 15,
+                    serverPaging: true,
+                    serverFiltering: true,
+                    serverSorting: true
+                },
+                scrollable: false,
+                pageable: {
+                    refresh: true,
+                    pageSizes: [5, 10, 15, 20],
+                },
+                columns: [
+                {
+                    field: "ProductName",
+                    title: "@T("Admin.Orders.ShoppingCartModel.Fields.ProductName")"
+                },{
+                    field: "QuantityWithMeasurement",
+                    title: "@T("Admin.Orders.ShoppingCartModel.Fields.QuantityWithMeasurement")",
+                },
+                {
+                    field: "Rate",
+                    title: "@T("Admin.Orders.ShoppingCartModel.Fields.Rate")"
+                },
+                {
+                    field: "TotalAmount",
+                    title: "@T("Admin.Orders.ShoppingCartModel.Fields.TotalAmount")"
+                },
+                {
+                    field: "Id",
+                    title: "@T("Admin.Common.Edit")",
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                    template:' <div class="btn-group"><button type="button" id="editCartItem" data-productId="#=Id#" data-url="@Url.Action("EditCartItem","Order")" class="btn btn-info">Edit</button><button id="deleteCartItem" data-productId="#=Id#" data-url="@Url.Action("DeleteCartItem","Order")" class="btn btn-danger">Delete</button></div>'
+                }
+            ]
+            });
+
+            BindSelect2Component('#@Html.FieldIdFor(Model => Model.Name)','@Html.Raw(Url.Action("SearchCustomer", "Customer"))',addAntiForgeryToken());
+            BindSelect2Component('#@Html.FieldIdFor(Model => Model.CartItems.ProductName)', '@Html.Raw(Url.Action("SearchProduct", "Product"))', addAntiForgeryToken());
+
+            $("#OrderGrid").on("click", "#editCartItem", function () {
+                let data =
+                {
+                    CustomerId: $('#@Html.FieldIdFor(Model => Model.Name)').val(),
+                    Id: $(this).data("productid")
+                };
+                let token = addAntiForgeryToken();
+                let url = $(this).data('url');
+                $.post(url, { model: data, __RequestVerificationToken:token.__RequestVerificationToken })
+                    .done((data) =>
+                    {
+                        let option = new Option(data.ProductName, data.ProductId, false, true);
+                        $('#CartItems_ProductName').append(option).trigger('change');
+                        $('#@Html.FieldIdFor(Model => Model.CartItems.Quantity)').val(data.Quantity);
+                        $('#Measurement').text(data.Measurement);
+                        $('#AddToCart').attr("name", "updateItem");
+                    });
+                return false;
+            });
+
+            $("#OrderGrid").on("click", "#deleteCartItem", function () {
+                let data =
+                {
+                    CustomerId: $('#@Html.FieldIdFor(Model => Model.Name)').val(),
+                    Id: $(this).data("productid")
+                };
+                let token = addAntiForgeryToken();
+                let url = $(this).data('url');
+                $.post(url, { model: data, __RequestVerificationToken:token.__RequestVerificationToken })
+                    .done((data) =>
+                    {
+                         $('.alert.alert-info').removeClass("hidden").find('.msg1').text(data);
+                        var grid = $('#OrderGrid').data('kendoGrid');
+                        grid.dataSource.page(1);
+                    });
+                return false;
+            });
+
+             $('#@Html.FieldIdFor(Model => Model.Name)').change(function () {
+                var data = { Id: $(this).val() };
+                addAntiForgeryToken(data);
+                $.post('@Html.Raw(Url.Action("GetCustomerAddress", "Customer"))', {Id:data.Id,__RequestVerificationToken:data.__RequestVerificationToken})
+                    .done((data) => {
+                        $('#@Html.FieldIdFor(Model => Model.Address)').val(data.Address);
+                        ValidationMessage('#@Html.FieldIdFor(Model => Model.Name)', null, true);
+                         CalculateTotals(data?.GrandTotal);
+                        var grid = $('#OrderGrid').data('kendoGrid');
+                        grid.dataSource.page(1);
+                    })
+                    .fail(() => {
+                         $(this).closest(".form-group").children('.validationMsg').removeClass("hidden").text("@T("Admin.Orders.Order.Customer.IdNotValid")");
+                         ValidationMessage('#@Html.FieldIdFor(Model => Model.Name)',"@T("Admin.Orders.Order.Customer.IdNotValid")",false);
+                    });
+            });
+
+             $('#@Html.FieldIdFor(Model => Model.CartItems.ProductName)').change(function () {
+                var data = { Id: $(this).val() };
+                addAntiForgeryToken(data);
+                     $.post('@Html.Raw(Url.Action("GetProductInfo", "Product"))', { Id: data.Id, __RequestVerificationToken: data.__RequestVerificationToken })
+                     .done((data) => {
+                         $('#@Html.FieldIdFor(model => model.CartItems.CurrentStockQuantity)').val(data.CurrentStock);
+                         $('#@Html.FieldIdFor(model => model.CartItems.Price)').val(data.Price);
+                         $('#Measurement').text(data.Measurement);
+                         $(this).closest(".form-group").children('.validationMsg').addClass("hidden").text("");
+                     })
+                     .fail(() => {
+                          $(this).closest(".form-group").children('.validationMsg').removeClass("hidden").text("@T("Admin.Orders.Order.Product.IdNotValid")");
+                          $('#@Html.FieldIdFor(model => model.CartItems.CurrentStockQuantity)').val("");
+                         $('#@Html.FieldIdFor(model => model.CartItems.Price)').val("");
+                         $('#Measurement').val("");
+                     });
+             });
+
+            $('#AddToCart').click(function () {
+                $(this).attr("disabled", "disabled");
+                cartRequest("@Url.Action("AddToCart", "Order")", $(this).attr("name"));
+                $(this).removeAttr("disabled");
+                return false;
+            });
+
+            function cartRequest(url, name) {
+                $('.alert.alert-danger').addClass("hidden");
+                $('.alert.alert-info').addClass("hidden");
+                additionalData();
+                if (processRequest)
+                {
+                     let token = addAntiForgeryToken();
+                    $.post(url, { model: additionalData(), [name]: name,__RequestVerificationToken: token.__RequestVerificationToken })
+                            .done((data) => {
+                                $('#@Html.FieldIdFor(model => model.CartItems.ProductName)').val("").text("");
+                                $('#@Html.FieldIdFor(model => model.CartItems.Quantity)').val("");
+                                $('#@Html.FieldIdFor(model => model.CartItems.Price)').val("");
+                                $('#@Html.FieldIdFor(model => model.CartItems.CurrentStockQuantity)').val("");
+                                $('#AddToCart').attr("name", "insertItem");
+                                CalculateTotals(data?.GrandTotal);
+                                var grid = $('#OrderGrid').data('kendoGrid');
+                                grid.dataSource.page(1);
+                            })
+                            .fail((data) =>
+                             {
+                                $('.alert.alert-danger').removeClass("hidden").find('.msg').text(data);
+                            });
+                }
+            }
+
+            function additionalData() {
+                let customerId = 0, productId = 0, quantity = 0;
+                if ($('#@Html.FieldIdFor(model => model.Name)').val()) {
+                    customerId = $('#@Html.FieldIdFor(model => model.Name)').val();
+                    ValidationMessage('#@Html.FieldIdFor(Model => Model.Name)', null, true);
+                    processRequest = true;
+                }
+                else {
+                    ValidationMessage('#@Html.FieldIdFor(Model => Model.Name)', "@T("Admin.Orders.Order.Customer.Name.Invalid")", false);
+                     processRequest = false;
+                 }
+
+                 if ($('#@Html.FieldIdFor(model => model.CartItems.ProductName)').val()) {
+                    ValidationMessage('#@Html.FieldIdFor(Model => Model.CartItems.ProductName)',null,true);
+                     productId = $('#@Html.FieldIdFor(model => model.CartItems.ProductName)').val();
+                     processRequest = true;
+                }
+                  else {
+                     ValidationMessage('#@Html.FieldIdFor(model => model.CartItems.ProductName)', "@T("Admin.Orders.Order.Product.Name.Invalid")", false);
+                     processRequest = false;
+                }
+
+                if (parseFloat($('#@Html.FieldIdFor(model => model.CartItems.Quantity)').val())) {
+                    quantity = $('#@Html.FieldIdFor(model => model.CartItems.Quantity)').val();
+                    ValidationMessage('#@Html.FieldIdFor(model => model.CartItems.Quantity)', null, true);
+                    processRequest = true;
+                }
+                else {
+                    ValidationMessage('#@Html.FieldIdFor(model => model.CartItems.Quantity)', '@T("Admin.Orders.Order.Product.Quantity.Invalid")', false);
+                    processRequest = false;
+                }
+                let data = { CustomerId: customerId, ProductId: productId, Quantity:quantity};
+                return data;
+            }
+
+            function addGridData() {
+                let data =
+                {
+                    CustomerId: $('#@Html.FieldIdFor(model => model.Name)').val()
+                };
+                return data;
+            }
+
+            function ValidationMessage(selector, msg,isHide) {
+                if (isHide)
+                    $(selector).closest(".form-group").children('.validationMsg').addClass("hidden").text("");
+                else
+                    $(selector).closest(".form-group").children('.validationMsg').removeClass("hidden").text(msg);
+            }
+
+            function CalculateTotals(grandTotal) {
+                if (grandTotal)
+                {
+                    $('#@Html.FieldIdFor(model => model.GrandTotal)').val(grandTotal);
+                    $('#@Html.FieldIdFor(model=>model.TotalPayment)').keyup();
+                }
+            }
+
+            $('#@Html.FieldIdFor(model=>model.TotalPayment)').keyup(function () {
+                let value = parseFloat($(this).val())?.toFixed(2);
+                let grandTotal = parseFloat($('#@Html.FieldIdFor(model => model.GrandTotal)').val());
+                if (value) {
+                    let duePayment = grandTotal - value;
+                    if(duePayment)
+                        $('#@Html.FieldIdFor(model => model.PaymentDue)').val(duePayment);
+                    else if (duePayment == 0)
+                        $('#@Html.FieldIdFor(model => model.PaymentDue)').val(duePayment);
+                    else
+                        $('#@Html.FieldIdFor(model => model.PaymentDue)').val(grandTotal);
+                }
+            });
+        });
+    </script>
+}

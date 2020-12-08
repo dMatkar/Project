@@ -1,0 +1,234 @@
+﻿@model Project.Web.Areas.Admin.Models.Catalog.ProductListModel
+
+@{
+    ViewBag.Title = "List";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <section class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Admin.Products.Products")
+        </h1>
+        <div class="pull-right">
+            <a href="@(Html.Raw(Url.Action("Create","Product")))" class="btn bg-blue">  <i class="fa fa-plus-square"></i> @T("Admin.Common.Add")</a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success">@T("Admin.Common.Export")</button>
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <button type="submit" name="exportexcel-All" value="data1">
+                            <i class="fa fa-file-excel-o"></i>
+                            @T("Admin.Common.Export.All")
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" id="exportexcel-selected" value="data2">
+                            <i class="fa fa-file-excel-o"></i>
+                            @T("Admin.Common.Export.Selected")
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-header with-border box-toggle">
+                        <i class="fa fa-search"></i>
+                        <h3 class="box-title">@T("Admin.Common.Search")</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            @Html.LabelFor(model => model.SearchProductName)
+                                        </div>
+                                        <div class="col-md-8">
+                                            @Html.ProjectTextBoxFor(model => model.SearchProductName)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            @Html.LabelFor(model => model.SearchCategoryId)
+                                        </div>
+                                        <div class="col-md-8">
+                                            @Html.ProjectDropDownListFor(model => model.SearchCategoryId, Model.AvailableCategories, "select categories")
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7 col-md-offset-5">
+                                    <button type="button" class="btn btn-primary btn-search" id="search-Products">@T("Admin.Common.Search")</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel p">
+                    <div class="box-body">
+                        <div id="example">
+                            <div id="ProductsGrid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            var selectedIds = [];
+            $("#ProductsGrid").kendoGrid({
+                dataSource: {
+                    dataType: "json",
+                    transport: {
+                        read: {
+                            url: "@Html.Raw(Url.Action("ProductsList", "Product"))",
+                            type: "post",
+                            dataType: "json",
+                            data: additionalData
+                        }
+                    },
+                    schema: {
+                        data: "Data",
+                        total: "Total",
+                    },
+                    errors: function (e) {
+                        display_kendo_errors(e);
+                    },
+                    pageSize: 3,
+                    serverPaging: true,
+                    serverFiltering: true,
+                    serverSorting: true
+                },
+                scrollable: false,
+                pageable: {
+                    refresh: true,
+                    pageSizes: [5, 10, 15, 20],
+                },
+                dataBound: onDataBound,
+                columns: [
+                    {
+                        field: "Id",
+                        headerTemplate: '<input type="checkbox" id="mastercheckbox">',
+                        headerAttributes: { style: "text-align:center" },
+                        attributes: { style: "text-align:center" },
+                        template: '<input type="checkbox" class="checkboxgroups" value="#=Id#">',
+                        width: 50
+                    },
+                    {
+                        field: "Name",
+                        title: "@T("Admin.Products.Products.Fields.Name")",
+                    },
+                    {
+                        field: "Price",
+                        title: "@T("Admin.Products.Products.Fields.Price")"
+                    },
+                    {
+                        field: "ProductCost",
+                        title: "@T("Admin.Products.Products.Fields.ProductCost")"
+                    },
+                    {
+                        field: "StockQuantity",
+                        title: "@T("Admin.Products.Products.Fields.StockQuantity")"
+                    },
+                    {
+                        field: "Published",
+                        title: "@T("Admin.Products.Products.Fields.Published")",
+                        template: "#if(Published){#<i class='fa fa-check true-icon'></i>#}else{#<i class='fa fa-close false-icon'></i>#}#"
+                    },
+                    {
+                        field: "Id",
+                        title: "@T("Admin.Common.Edit")",
+                        headerAttributes: { style: "text-align:center" },
+                        attributes: { style: "text-align:center" },
+                        template: '<a class="btn btn-info" href="@Url.Action("Edit","Product")/#=Id#">Edit</a>'
+                    }
+                ]
+              });
+            $('#mastercheckbox').change(function () {
+                $(".checkboxgroups").prop('checked', $('#mastercheckbox').is(":checked")).change();
+            });
+            $("#ProductsGrid").on("change", ":checkbox[id!='mastercheckbox'][class='checkboxgroups']", function () {
+                let $check = $(this);
+                let searchedValue = $.inArray($check.val(), selectedIds);
+                if ($check.is(":checked")) {
+                    if (searchedValue == -1)
+                        selectedIds.push($check.val());
+                }
+                else {
+                    if (searchedValue > -1)
+                       selectedIds=$.grep(selectedIds, (element, index) => element != $check.val());
+                }
+                updateMasterCheckbox();
+            });
+            $('.box>.box-header.box-toggle').on('click', function () {
+                  let $element = $(this).siblings('div[class|="box"]');
+                  if ($element.css('display') === "block") {
+                      $element.slideUp(500);
+                      $('i', '.box>.box-header>.box-tools').removeClass('fa fa-minus').addClass('fa fa-plus');
+                  }
+                  else {
+                      $element.slideDown(500);
+                      $('i', '.box>.box-header>.box-tools').removeClass('fa fa-minus').addClass('fa fa-minus');
+                  }
+            });
+            $('#search-Products').click(function () {
+                e.preventDefault();
+                var grid = $('#CategoryGrid').data('kendoGrid');
+                grid.dataSource.page(1);
+                $('.checkboxGroups').attr('checked', false).change();
+                selectedIds = [];
+            });
+            $("".concat("#@Html.FieldIdFor(model=>model.SearchCategoryId),",
+                "#@Html.FieldIdFor(model=>model.SearchProductName)")).keydown(function (e) {
+                e.preventDefault();
+                if (e.keyCode === 13)
+                    $('#search-Products').click();
+                });
+            function additionalData() {
+                  let data =
+                  {
+                      SearchProductName:$('#@Html.FieldIdFor(model=>model.SearchProductName)').val(),
+                      SearchCategoryId: $('#@Html.FieldIdFor(model=>model.SearchCategoryId)').val(),
+                  }
+                  addAntiForgeryToken(data);
+                  return data;
+            }
+            function onDataBound() {
+                $(':checkbox[id!="mastercheckbox"][class="checkboxgroups"]', '#CategoryGrid').each(function () {
+                    var currentId = $(this).val();
+                    var checked = jQuery.inArray(currentId, selectedIds);
+                    $(this).prop('checked', checked > -1);
+                });
+            }
+            function updateMasterCheckbox() {
+                let totalCheckBoxLength = $(":checkbox[id!='mastercheckbox'][class='checkboxgroups']").length;
+                let totalCheckedBoxLength = $(":checkbox[id!='mastercheckbox'][class='checkboxgroups']:checked").length;
+                $(":checkbox[id='mastercheckbox']").prop('checked', totalCheckBoxLength == totalCheckedBoxLength);
+            }
+});
+    </script>
+}

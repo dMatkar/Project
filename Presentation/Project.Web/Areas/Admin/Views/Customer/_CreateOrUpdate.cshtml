@@ -1,0 +1,98 @@
+﻿@model Project.Web.Areas.Admin.Models.Customers.CustomerModel
+
+<section class="content">
+    <div class="box box-default">
+        @Html.RenderBootstrapBoxHeader("Customer info", "fa fa-info")
+        @Html.RenderBootstrapBoxContent(BoxInfo(), new { @class = "text" })
+    </div>
+    <div class="box box-default">
+        @Html.RenderBootstrapBoxHeader("Customer Address", "fa fa-home")
+        @Html.RenderBootstrapBoxContent(BoxAddress(), new { @class = "text" })
+    </div>
+</section>
+
+@helper BoxInfo()
+{
+    @Html.HiddenFor(model => model.Id)
+    <div class="row box-default">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.FirstName)
+                @Html.ProjectTextBoxFor(model => model.FirstName)
+                @Html.ValidationMessageFor(model => model.FirstName)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.LastName)
+                @Html.ProjectTextBoxFor(model => model.LastName)
+                @Html.ValidationMessageFor(model => model.LastName)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.MobileNumber)
+                @Html.ProjectTextBoxFor(model => model.MobileNumber)
+                @Html.ValidationMessageFor(model => model.MobileNumber)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email)
+                @Html.ProjectTextBoxFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsTaxExempt)
+                @Html.ProjectCheckBoxFor(model => model.IsTaxExempt)
+                @Html.ValidationMessageFor(model => model.IsTaxExempt)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Active)
+                @Html.ProjectCheckBoxFor(model => model.Active)
+                @Html.ValidationMessageFor(model => model.Active)
+            </div>
+            @if (Model.Id > 0)
+            {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CreatedOnUtc)
+                    @Html.ProjectDisplayFor(model => model.CreatedOnUtc)
+                    @Html.ValidationMessageFor(model => model.CreatedOnUtc)
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@helper BoxAddress()
+{
+    @Html.HiddenFor(model => model.Address.Id)
+    <div class="row box-default">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address.StateProvinceId)
+                @Html.ProjectDropDownListFor(model => model.Address.StateProvinceId, Model.Address.AvailableStates, T("Admin.Customers.Customers.Addresses"))
+                @Html.ValidationMessageFor(model => model.Address.StateProvinceId)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address.Address1)
+                @Html.ProjectTextBoxFor(model => model.Address.Address1)
+                @Html.ValidationMessageFor(model => model.Address.Address1)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address.Address2)
+                @Html.ProjectTextBoxFor(model => model.Address.Address2)
+                @Html.ValidationMessageFor(model => model.Address.Address2)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address.Address3)
+                @Html.ProjectTextBoxFor(model => model.Address.Address3)
+                @Html.ValidationMessageFor(model => model.Address.Address3)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address.City)
+                @Html.ProjectTextBoxFor(model => model.Address.City)
+                @Html.ValidationMessageFor(model => model.Address.City)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address.ZipPostalCode)
+                @Html.ProjectTextBoxFor(model => model.Address.ZipPostalCode)
+                @Html.ValidationMessageFor(model => model.Address.ZipPostalCode)
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap>
+  <siteMapNode systemName="Home" nopResource="Admin.Home" controller="Home" action="Overview">
+    <siteMapNode systemName="Dashboard" nopResource="Admin.Dashboard" controller="Home" action="Index" IconClass="fa-desktop" />
+    <siteMapNode systemName="Catalog" nopResource="Admin.Catalog" PermissionNames="ManageProducts,ManageCategories,ManageManufacturers,ManageProductReviews,ManageProductTags,ManageAttributes" IconClass="fa-book" >
+      <siteMapNode systemName="Products" nopResource="Admin.Catalog.Products" PermissionNames="ManageProducts" controller="Product" action="List" IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Categories" nopResource="Admin.Catalog.Categories" PermissionNames="ManageCategories" controller="Category" action="List" IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Manufacturers" nopResource="Admin.Catalog.Manufacturers" PermissionNames="ManageManufacturers" controller="Manufacturer" action="List" IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Bulk edit products" nopResource="Admin.Catalog.BulkEdit" PermissionNames="ManageProducts" controller="Product" action="BulkEdit" IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Product reviews" nopResource="Admin.Catalog.ProductReviews" PermissionNames="ManageProductReviews" controller="ProductReview" action="List" IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Measurement" nopResource="Admin.Catalog.Measurement" PermissionNames="Measurement" controller="Measurement" action="List" IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Low stock report" nopResource="Admin.Catalog.LowStockReport" PermissionNames="ManageProducts" controller="Product" action="LowStockReport" IconClass="fa-dot-circle-o"/>
+    </siteMapNode>
+    <siteMapNode systemName="Sales" nopResource="Admin.Sales" PermissionNames="ManageOrders,ManageRecurringPayments,ManageReturnRequests,ManageGiftCards,ManageCurrentCarts,OrderCountryReport" IconClass="fa-shopping-cart">
+      <siteMapNode systemName="Orders" nopResource="Admin.Orders" PermissionNames="ManageOrders" controller="Order" action="List"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Shipments" nopResource="Admin.Orders.Shipments.List" PermissionNames="ManageOrders" controller="Order" action="ShipmentList"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Return requests" nopResource="Admin.ReturnRequests" PermissionNames="ManageReturnRequests" controller="ReturnRequest" action="List"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Recurring payments" nopResource="Admin.RecurringPayments" PermissionNames="ManageRecurringPayments" controller="RecurringPayment" action="List"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Gift cards" nopResource="Admin.GiftCards" PermissionNames="ManageGiftCards" controller="GiftCard" action="List"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Current shopping carts" nopResource="Admin.CurrentCarts" PermissionNames="ManageCurrentCarts" controller="ShoppingCart" action="CurrentCarts"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Current wishlists" nopResource="Admin.CurrentWishlists" PermissionNames="ManageCurrentCarts" controller="ShoppingCart" action="CurrentWishlists"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Bestsellers" nopResource="Admin.SalesReport.Bestsellers" PermissionNames="ManageOrders" controller="Order" action="BestsellersReport"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Products never purchased" nopResource="Admin.SalesReport.NeverSold" PermissionNames="ManageOrders" controller="Order" action="NeverSoldReport"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Country report" nopResource="Admin.SalesReport.Country" PermissionNames="OrderCountryReport" controller="Order" action="CountryReport"  IconClass="fa-dot-circle-o"/>
+    </siteMapNode>
+    <siteMapNode systemName="Customers" nopResource="Admin.Customers" PermissionNames="ManageCustomers, ManageVendors, ManageActivityLog" IconClass="fa-user" >
+      <siteMapNode systemName="Customers list" nopResource="Admin.Customers.Customers" PermissionNames="ManageCustomers" controller="Customer" action="List" IconClass="fa-dot-circle-o" />
+      <siteMapNode systemName="Customer roles" nopResource="Admin.Customers.CustomerRoles" PermissionNames="ManageCustomers" controller="CustomerRole" action="List" IconClass="fa-dot-circle-o" />
+      <siteMapNode systemName="Online customers" nopResource="Admin.Customers.OnlineCustomers" PermissionNames="ManageCustomers" controller="OnlineCustomer" action="List" IconClass="fa-dot-circle-o" />
+      <siteMapNode systemName="Customer reports" nopResource="Admin.Customers.Reports" PermissionNames="ManageCustomers" controller="Customer" action="Reports" IconClass="fa-dot-circle-o" />
+      <siteMapNode systemName="Vendors" nopResource="Admin.Vendors" PermissionNames="ManageVendors" controller="Vendor" action="List" IconClass="fa-dot-circle-o" />
+      <siteMapNode systemName="Activity log" nopResource="Admin.Configuration.ActivityLog" PermissionNames="ManageActivityLog" IconClass="fa-dot-circle-o">
+        <siteMapNode systemName="Activity log list" nopResource="Admin.Configuration.ActivityLog.ActivityLog" controller="ActivityLog" action="ListLogs" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Activity types" nopResource="Admin.Configuration.ActivityLog.ActivityLogType" controller="ActivityLog" action="ListTypes" IconClass="fa-genderless"/>
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode systemName="Promotions" nopResource="Admin.Promotions" PermissionNames="ManageAffiliates, ManageNewsletterSubscribers, ManageCampaigns, ManageDiscounts" IconClass="fa-tags">
+      <siteMapNode systemName="Discounts" nopResource="Admin.Promotions.Discounts" PermissionNames="ManageDiscounts" controller="Discount" action="List" IconClass="fa-dot-circle-o" />
+      <siteMapNode systemName="Affiliates" nopResource="Admin.Affiliates" PermissionNames="ManageAffiliates" controller="Affiliate" action="List" IconClass="fa-dot-circle-o" />
+      <siteMapNode systemName="Newsletter subscriptions" nopResource="Admin.Promotions.NewsletterSubscriptions" PermissionNames="ManageNewsletterSubscribers" controller="NewsLetterSubscription" action="List"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Campaigns" nopResource="Admin.Promotions.Campaigns" PermissionNames="ManageCampaigns" controller="Campaign" action="List"  IconClass="fa-dot-circle-o"/>
+    </siteMapNode>
+    <siteMapNode systemName="Content Management" nopResource="Admin.ContentManagement" PermissionNames="ManagePolls, ManageNews, ManageBlog, ManageTopics, ManageForums, ManageMessageTemplates" IconClass="fa-cubes">
+      <siteMapNode systemName="Topics" nopResource="Admin.ContentManagement.Topics" PermissionNames="ManageTopics" controller="Topic" action="List" IconClass="fa-dot-circle-o" />
+      <siteMapNode systemName="Message templates" nopResource="Admin.ContentManagement.MessageTemplates" PermissionNames="ManageMessageTemplates" controller="MessageTemplate" action="List"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="News" nopResource="Admin.ContentManagement.News" PermissionNames="ManageNews" IconClass="fa-dot-circle-o">
+        <siteMapNode systemName="News items" nopResource="Admin.ContentManagement.News.NewsItems" controller="News" action="List"  IconClass="fa-genderless"/>
+        <siteMapNode systemName="News comments" nopResource="Admin.ContentManagement.News.Comments" controller="News" action="Comments" IconClass="fa-genderless"/>
+      </siteMapNode>
+      <siteMapNode systemName="Blog" nopResource="Admin.ContentManagement.Blog" PermissionNames="ManageBlog" IconClass="fa-dot-circle-o">
+        <siteMapNode systemName="Blog posts" nopResource="Admin.ContentManagement.Blog.BlogPosts" controller="Blog" action="List" IconClass="fa-genderless" />
+        <siteMapNode systemName="Blog comments" nopResource="Admin.ContentManagement.Blog.Comments" controller="Blog" action="Comments" IconClass="fa-genderless"/>
+      </siteMapNode>
+      <siteMapNode systemName="Polls" nopResource="Admin.ContentManagement.Polls" PermissionNames="ManagePolls" controller="Poll" action="List"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Manage forums" nopResource="Admin.ContentManagement.Forums" PermissionNames="ManageForums" controller="Forum" action="List"  IconClass="fa-dot-circle-o"/>
+    </siteMapNode>
+    <siteMapNode systemName="Configuration" nopResource="Admin.Configuration" PermissionNames="ManageCountries,ManageLanguages,ManageSettings,ManagePaymentMethods,ManageExternalAuthenticationMethods,ManageWidgets,ManageTaxSettings,ManageShippingSettings,ManageCurrencies,ManageACL,ManageEmailAccounts,ManagePlugins"
+       IconClass="fa-gears">
+      <siteMapNode systemName="Settings" nopResource="Admin.Configuration.Settings" PermissionNames="ManageSettings" IconClass="fa-dot-circle-o" >
+        <siteMapNode systemName="General settings" nopResource="Admin.Configuration.Settings.GeneralCommon" controller="Setting" action="GeneralCommon" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Customer and user settings" nopResource="Admin.Configuration.Settings.CustomerUser" controller="Setting" action="CustomerUser" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Order settings" nopResource="Admin.Configuration.Settings.Order" controller="Setting" action="Order" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Shipping settings" nopResource="Admin.Configuration.Settings.Shipping" controller="Setting" action="Shipping" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Tax settings" nopResource="Admin.Configuration.Settings.Tax" controller="Setting" action="Tax" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Catalog settings" nopResource="Admin.Configuration.Settings.Catalog" controller="Setting" action="Catalog" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Shopping cart settings" nopResource="Admin.Configuration.Settings.ShoppingCart" controller="Setting" action="ShoppingCart" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Reward points" nopResource="Admin.Configuration.Settings.RewardPoints" controller="Setting" action="RewardPoints" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Vendor settings" nopResource="Admin.Configuration.Settings.Vendor" controller="Setting" action="Vendor" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Blog settings" nopResource="Admin.Configuration.Settings.Blog" controller="Setting" action="Blog" IconClass="fa-genderless"/>
+        <siteMapNode systemName="News settings" nopResource="Admin.Configuration.Settings.News" controller="Setting" action="News" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Forums settings" nopResource="Admin.Configuration.Settings.Forums" controller="Setting" action="Forum" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Media settings" nopResource="Admin.Configuration.Settings.Media" controller="Setting" action="Media" IconClass="fa-genderless"/>
+        <siteMapNode systemName="All settings" nopResource="Admin.Configuration.Settings.AllSettings" controller="Setting" action="AllSettings" IconClass="fa-genderless"/>
+      </siteMapNode>
+      <siteMapNode systemName="Email accounts" nopResource="Admin.Configuration.EmailAccounts" PermissionNames="ManageEmailAccounts" controller="EmailAccount" action="List" IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Stores" nopResource="Admin.Configuration.Stores" PermissionNames="ManageStores" controller="Store" action="List" IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Countries" nopResource="Admin.Configuration.Countries" PermissionNames="ManageCountries" controller="Country" action="List" IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Languages" nopResource="Admin.Configuration.Languages" PermissionNames="ManageLanguages" controller="Language" action="List" IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Currencies" nopResource="Admin.Configuration.Currencies" PermissionNames="ManageCurrencies" controller="Currency" action="List" IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Payment" nopResource="Admin.Configuration.Payment" PermissionNames="ManagePaymentMethods" IconClass="fa-dot-circle-o">
+        <siteMapNode systemName="Payment methods" nopResource="Admin.Configuration.Payment.Methods" PermissionNames="ManagePaymentMethods" controller="Payment" action="Methods" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Payment method restrictions" nopResource="Admin.Configuration.Payment.MethodRestrictions" PermissionNames="ManagePaymentMethods" controller="Payment" action="MethodRestrictions" IconClass="fa-genderless"/>
+      </siteMapNode>
+      <siteMapNode systemName="Tax" nopResource="Admin.Configuration.Tax" PermissionNames="ManageTaxSettings" IconClass="fa-dot-circle-o">
+        <siteMapNode systemName="Tax providers" nopResource="Admin.Configuration.Tax.Providers" controller="Tax" action="Providers" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Tax categories" nopResource="Admin.Configuration.Tax.Categories" controller="Tax" action="Categories" IconClass="fa-genderless"/>
+      </siteMapNode>
+      <siteMapNode systemName="Shipping" nopResource="Admin.Configuration.Shipping" PermissionNames="ManageShippingSettings" IconClass="fa-dot-circle-o">
+        <siteMapNode systemName="Shipping providers" nopResource="Admin.Configuration.Shipping.Providers"  controller="Shipping" action="Providers" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Warehouses" nopResource="Admin.Configuration.Shipping.Warehouses" controller="Shipping" action="Warehouses" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Pickup points" nopResource="Admin.Configuration.Shipping.PickupPoints"  controller="Shipping" action="PickupPointProviders" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Dates and ranges" nopResource="Admin.Configuration.Shipping.DatesAndRanges" controller="Shipping" action="DatesAndRanges" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Measures" nopResource="Admin.Configuration.Shipping.Measures" controller="Measure" action="List"  IconClass="fa-genderless" />
+      </siteMapNode>
+      <siteMapNode systemName="Access control list" nopResource="Admin.Configuration.ACL" PermissionNames="ManageACL" controller="Security" action="Permissions" IconClass="fa-dot-circle-o" />
+      <siteMapNode systemName="Widgets" nopResource="Admin.ContentManagement.Widgets" PermissionNames="ManageWidgets" controller="Widget" action="List"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="External authentication methods" nopResource="Admin.Configuration.ExternalAuthenticationMethods" PermissionNames="ManageExternalAuthenticationMethods" controller="ExternalAuthentication" action="Methods" IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Plugins" nopResource="Admin.Configuration.Plugins" PermissionNames="ManagePlugins" IconClass="fa-dot-circle-o">
+        <siteMapNode systemName="Local plugins" nopResource="Admin.Configuration.Plugins.Local" PermissionNames="ManagePlugins" controller="Plugin" action="List" IconClass="fa-genderless"/>
+        <siteMapNode systemName="All plugins and themes catalog" nopResource="Admin.Configuration.Plugins.OfficialFeed" PermissionNames="ManagePlugins" controller="Plugin" action="OfficialFeed" IconClass="fa-genderless"/>
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode systemName="System" nopResource="Admin.System" PermissionNames="ManageSystemLog,ManageMessageQueue,ManageMaintenance,ManageScheduleTasks" IconClass="fa-cube">
+      <siteMapNode systemName="System information" nopResource="Admin.System.SystemInfo" PermissionNames="ManageMaintenance" controller="Common" action="SystemInfo"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Log" nopResource="Admin.System.Log" PermissionNames="ManageSystemLog" controller="Log" action="List"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Warnings" nopResource="Admin.System.Warnings" PermissionNames="ManageMaintenance" controller="Common" action="Warnings"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Maintenance" nopResource="Admin.System.Maintenance" PermissionNames="ManageMaintenance" controller="Common" action="Maintenance"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Queued emails" nopResource="Admin.System.QueuedEmails" PermissionNames="ManageMessageQueue" controller="QueuedEmail" action="List"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Schedule tasks" nopResource="Admin.System.ScheduleTasks" PermissionNames="ManageScheduleTasks" controller="ScheduleTask" action="List"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Search engine friendly names" nopResource="Admin.System.SeNames" PermissionNames="ManageMaintenance" controller="Common" action="SeNames"  IconClass="fa-dot-circle-o"/>
+      <siteMapNode systemName="Templates" nopResource="Admin.System.Templates" PermissionNames="ManageMaintenance" IconClass="fa-dot-circle-o">
+        <siteMapNode systemName="Category templates" nopResource="Admin.System.Templates.Category" controller="Template" action="CategoryTemplates" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Manufacturer templates" nopResource="Admin.System.Templates.Manufacturer" controller="Template" action="ManufacturerTemplates" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Product templates" nopResource="Admin.System.Templates.Product" controller="Template" action="ProductTemplates" IconClass="fa-genderless"/>
+        <siteMapNode systemName="Topic templates" nopResource="Admin.System.Templates.Topic" controller="Template" action="TopicTemplates" IconClass="fa-genderless"/>
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode systemName="Help" nopResource="Admin.Help" IconClass="fa-question-circle">
+      <siteMapNode systemName="Help topics" nopResource="Admin.Help.Topics" url="http://docs.nopcommerce.com/dashboard.action?utm_source=admin-panel&amp;utm_medium=menu&amp;utm_campaign=admin-panel"  IconClass="fa-dot-circle-o" OpenUrlInNewTab="true"/>
+      <siteMapNode systemName="Community forums" nopResource="Admin.Help.Forums" url="http://www.nopcommerce.com/boards/?utm_source=admin-panel&amp;utm_medium=menu&amp;utm_campaign=admin-panel"  IconClass="fa-dot-circle-o" OpenUrlInNewTab="true"/>
+      <siteMapNode systemName="Premium support services" nopResource="Admin.Help.SupportServices" url="http://www.nopcommerce.com/p/541/nopcommerce-premium-support-services.aspx?utm_source=admin-panel&amp;utm_medium=menu&amp;utm_campaign=admin-panel"  IconClass="fa-dot-circle-o" OpenUrlInNewTab="true"/>
+    </siteMapNode>
+    <siteMapNode systemName="Third party plugins" nopResource="Admin.Plugins" IconClass="fa-bars" />
+  </siteMapNode>
+</siteMap>
+

@@ -1,0 +1,57 @@
+﻿@using Project.Web.Framework.Models
+
+@helper DisplaySuccessNotification(string msg)
+{
+    <div class="alert alert-info alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <i class="icon fa fa-info"></i>
+        @msg
+    </div>
+}
+
+@helper DisplayErrorNotification(string msg)
+{
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <i class="icon fas fa-ban"></i>
+        @msg
+    </div>
+}
+
+@helper DisplayWarningNotification(string msg)
+{
+    <div class="alert alert-warning alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <i class="icon fas fa-exclamation-triangle"></i>
+        @msg
+    </div>
+}
+
+@{
+    if (ViewData[string.Format(string.Format("project.notifications.{0}", Notify.Success))] is List<string> successNotifications1 && successNotifications1.Any())
+    {
+        successNotifications1.ForEach(msg => WriteLiteral(DisplaySuccessNotification(msg)));
+    }
+    if (TempData[string.Format(string.Format("project.notifications.{0}", Notify.Success))] is List<string> successNotifications2 && successNotifications2.Any())
+    {
+        successNotifications2.ForEach(msg => WriteLiteral(DisplaySuccessNotification(msg)));
+    }
+
+    if (ViewData[string.Format(string.Format("project.notifications.{0}", Notify.Error))] is List<string> errorNotifications1 && errorNotifications1.Any())
+    {
+        errorNotifications1.ForEach(msg => WriteLiteral(DisplayErrorNotification(msg)));
+    }
+    if (TempData[string.Format(string.Format("project.notifications.{0}", Notify.Error))] is List<string> errorNotifications2 && errorNotifications2.Any())
+    {
+        errorNotifications2.ForEach(msg => WriteLiteral(DisplayErrorNotification(msg)));
+    }
+
+    if (ViewData[string.Format(string.Format("project.notifications.{0}", Notify.Warning))] is List<string> warningNotifications1 && warningNotifications1.Any())
+    {
+        warningNotifications1.ForEach(msg => WriteLiteral(DisplayWarningNotification(msg)));
+    }
+    if (TempData[string.Format(string.Format("project.notifications.{0}", Notify.Warning))] is List<string> warningNotifications2 && warningNotifications2.Any())
+    {
+        warningNotifications2.ForEach(msg => WriteLiteral(DisplayWarningNotification(msg)));
+    }
+}

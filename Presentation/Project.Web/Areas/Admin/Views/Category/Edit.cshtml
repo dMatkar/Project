@@ -1,0 +1,30 @@
+﻿@model Project.Web.Areas.Admin.Models.Catalog.CategoryModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <section class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Admin.Customers.Customers.AddNew")
+        </h1>
+        <div class="pull-right">
+            <button type="submit" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+            <button id="category-delete" type="button" class="btn bg-red">
+                @T("Admin.Common.Delete")
+            </button>
+        </div>
+    </section>
+    @Html.Partial("_CreateOrUpdate", Model)
+}
+@Html.DeleteConfiration("category-delete")

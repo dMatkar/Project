@@ -1,0 +1,23 @@
+﻿@using Project.Web.Framework.Models
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div>
+       @{ 
+           if (ViewData[string.Format(string.Format("project.notifications.{0}", Notify.Success))] is List<string> successNotifications1 && successNotifications1.Any())
+           {
+               successNotifications1.ForEach(msg => WriteLiteral(msg));
+           }
+       }
+    </div>
+</body>
+</html>

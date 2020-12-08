@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    List<SelectListItem> selectListItems = new List<SelectListItem>();
+    selectListItems.Add(new SelectListItem() { Text = "Item 1", Value = "1" });
+    selectListItems.Add(new SelectListItem() { Text = "Item 2", Value = "2" });
+    selectListItems.Add(new SelectListItem() { Text = "Item 3", Value = "3" });
+    List<int> list = new List<int>();
+    list.Add(1);
+    list.Add(2);
+    list.Add(2);
+
+    string data = string.Join(",", list);
+}
+
+
+@Html.DropDownList("required", selectListItems)
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            var required = $('#required').kendoMultiSelect({ autoBind: false}).data("kendoMultiSelect");
+            required.value([@(string.Join(",",list))]);
+            $('#button').click(function () {
+                console.log(required.value());
+            });
+        });
+    </script>
+}

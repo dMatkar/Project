@@ -1,0 +1,229 @@
+﻿@model Project.Web.Areas.Admin.Models.Catalog.CategoryListModel
+@{
+    ViewBag.Title = "Index";
+    Html.SetActiveSystemName("Category list");
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <section class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Admin.Category.Category")
+        </h1>
+        <div class="pull-right">
+            <a href="@(Html.Raw(Url.Action("Create","Category")))" class="btn bg-blue">  <i class="fa fa-plus-square"></i> @T("Admin.Common.Add")</a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success">@T("Admin.Common.Export")</button>
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <button type="submit" name="exportexcel-All" value="data1">
+                            <i class="fa fa-file-excel-o"></i>
+                            @T("Admin.Common.Export.All")
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" id="exportexcel-selected" value="data2">
+                            <i class="fa fa-file-excel-o"></i>
+                            @T("Admin.Common.Export.Selected")
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-header with-border box-toggle">
+                        <i class="fa fa-search"></i>
+                        <h3 class="box-title">@T("Admin.Common.Search")</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-5 col-md-offset-4">
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            @Html.LabelFor(model => model.SearchCategoryId)
+                                        </div>
+                                        <div class="col-md-8">
+                                            @Html.ProjectDropDownListFor(model => model.SearchCategoryId, Model.AvailableCategories, "Select Category")
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7 col-md-offset-5">
+                                    <button type="button" class="btn btn-primary btn-search" id="search-Category">@T("Admin.Common.Search")</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel p">
+                    <div class="box-body">
+                        <div id="example">
+                            <div id="CategoryGrid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+@using (Html.BeginForm("ExportExcelSelected", "Customer", FormMethod.Post, new { id = "export-excel-selected-form" }))
+{
+    <input type="hidden" value="" id="selectedIds" name="selectedIds" />
+}
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+          let selectedIds = [];
+          $("#CategoryGrid").kendoGrid({
+                dataSource: {
+                    dataType: "json",
+                    transport: {
+                        read: {
+                            url: "@Html.Raw(Url.Action("CategoryList", "Category"))",
+                            type: "post",
+                            dataType: "json",
+                            data: additionalData
+                        }
+                    },
+                    schema: {
+                        data: "Data",
+                        total: "Total",
+                    },
+                    errors: function (e) {
+                        display_kendo_errors(e);
+                    },
+                    pageSize: 5,
+                    serverPaging: true,
+                    serverFiltering: true,
+                    serverSorting: true
+                },
+                scrollable: false,
+                pageable: {
+                    refresh: true,
+                    pageSizes: [5, 10, 15, 20],
+                },
+                dataBound: onDataBound,
+                columns: [
+                    {
+                    field: "Id",
+                    headerTemplate:'<input type="checkbox" id="mastercheckbox">',
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                    template: '<input type="checkbox" class="checkboxgroups" value="#=Id#">',
+                    width:50
+                    },
+                {
+                    field: "Name",
+                    title: "@T("Admin.Category.Category.Fields.Name")"
+                },
+                {
+                    field: "DisplayOrder",
+                    title: "@T("Admin.Category.Category.Fields.DisplayOrder")"
+                },
+                {
+                    field: "CreatedOnUtc",
+                    title: "@T("Admin.Category.Category.Fields.CreatedOnUtc")",
+                    type: "date",
+                    format:"{0:G}"
+                },
+                {
+                    field: "Id",
+                    title: "@T("Admin.Common.Edit")",
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                    template:'<a class="btn btn-info" href="@Url.Action("Edit","Category")/#=Id#">Edit</a>'
+                }
+            ]
+         });
+
+           $("".concat("#@Html.FieldIdFor(model => model.SearchCategoryId)")).keydown(function(e)
+          {
+               if (e.keyCode == 13) {
+                   $('#search-Category').click();
+                   e.preventDefault();
+               }
+          });
+
+            $('#search-Category').click(function (e) {
+                e.preventDefault();
+                var grid = $('#CategoryGrid').data('kendoGrid');
+                grid.dataSource.page(1);
+                $('.checkboxGroups').attr('checked', false).change();
+                selectedIds = [];
+            });
+
+            $('#mastercheckbox').click(function () {
+                $('.checkboxgroups').prop('checked', $(this).is(":checked")).change();
+            });
+
+            $('#CategoryGrid').on('change', ':checkbox[id!="mastercheckbox"][class="checkboxgroups"]', function () {
+                let $check = $(this);
+                let searchedValue = jQuery.inArray($check.val(), selectedIds);
+                if ($check.is(":checked")) {
+                    if (searchedValue == -1) {
+                        selectedIds.push($check.val());
+                    }
+                }
+                else {
+                    if (searchedValue > -1) {
+                        selectedIds = jQuery.grep(selectedIds, (element, index) => element !== $check.val());
+                    }
+                }
+                UpdateMasterCheckbox();
+         });
+
+            function additionalData() {
+                let data =
+                {
+                    SearchFirstName : $('#@Html.FieldIdFor(model => model.SearchCategoryId)').val(),
+                }
+                addAntiForgeryToken(data);
+                return data;
+            }
+
+            function UpdateMasterCheckbox() {
+              let numOfCheckboxes = $(':checkbox[id!="mastercheckbox"][class="checkboxgroups"]').length;
+              let numOfCheckboxesChecked = $(':checkbox[id!="mastercheckbox"][class="checkboxgroups"]:checked').length;
+              $(":checkbox[id='mastercheckbox']").prop('checked', numOfCheckboxes == numOfCheckboxesChecked);
+            }
+
+            function onDataBound(e) {
+                $(':checkbox[id!="mastercheckbox"][class="checkboxgroups"]', '#CategoryGrid').each(function () {
+                    var currentId = $(this).val();
+                    var checked = jQuery.inArray(currentId, selectedIds);
+                    $(this).prop('checked', checked > -1);
+                });
+            }
+
+            //export to excel
+            $('#exportexcel-selected').click(function (e) {
+                e.preventDefault();
+                $('#selectedIds').val(selectedIds.toString());
+                $('#export-excel-selected-form').submit();
+            });
+});
+    </script>
+}
+
+

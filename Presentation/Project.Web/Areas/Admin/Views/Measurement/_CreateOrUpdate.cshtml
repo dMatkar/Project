@@ -1,0 +1,40 @@
+﻿@model Project.Web.Areas.Admin.Models.Catalog.MeasurementModel
+
+<section class="content">
+    <div class="box box-default">
+        @Html.RenderBootstrapBoxHeader("Category info", "fa fa-info")
+        @Html.RenderBootstrapBoxContent(BoxInfo(), new { @class = "text" })
+    </div>
+</section>
+
+@helper BoxInfo()
+{
+    @Html.HiddenFor(model => model.Id)
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name)
+                @Html.ProjectTextBoxFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.ShortName)
+                @Html.ProjectTextBoxFor(model => model.ShortName)
+                @Html.ValidationMessageFor(model => model.ShortName)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.AdminComment)
+                @Html.ProjectTextAreaFor(model => model.AdminComment)
+                @Html.ValidationMessageFor(model => model.AdminComment)
+            </div>
+            @if (Model.Id > 0)
+            {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CreatedOnUtc)
+                    @Html.ProjectDisplayFor(model => model.CreatedOnUtc)
+                    @Html.ValidationMessageFor(model => model.CreatedOnUtc)
+                </div>
+            }
+        </div>
+    </div>
+}

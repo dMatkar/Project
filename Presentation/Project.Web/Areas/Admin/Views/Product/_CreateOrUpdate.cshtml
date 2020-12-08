@@ -1,0 +1,132 @@
+﻿@model Project.Web.Areas.Admin.Models.Catalog.ProductModel
+@using Project.Core.Domain.Catalog
+@using Project.Web.Areas.Admin.Extentions
+
+<section class="content">
+    <div class="box box-default">
+        @Html.RenderBootstrapBoxHeader("Product info", "fa fa-info")
+        @Html.RenderBootstrapBoxContent(BoxInfo(), new { @class = "text" })
+    </div>
+    <div class="box box-default">
+        @Html.RenderBootstrapBoxHeader("Price", "fa fa-rupee")
+        @Html.RenderBootstrapBoxContent(BoxPrices(), new { @class = "text" })
+    </div>
+    <div class="box box-default">
+        @Html.RenderBootstrapBoxHeader("Inventory", "fa fa-sitemap")
+        @Html.RenderBootstrapBoxContent(BoxInventory(), new { @class = "text" })
+    </div>
+</section>
+
+@helper BoxInfo()
+{
+    @Html.HiddenFor(model => model.Id)
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name)
+                @Html.ProjectTextBoxFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.ShortDescription)
+                @Html.ProjectTextAreaFor(model => model.ShortDescription)
+                @Html.ValidationMessageFor(model => model.ShortDescription)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.CategoryIds)
+                @Html.ProjectDropDownListFor(model => model.CategoryIds, Model.AvailableCategories,htmlAttributes:new { multiple = "multiple"})
+                @Html.ValidationMessageFor(model => model.CategoryIds)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.MeasurementId)
+                @Html.ProjectDropDownListFor(model => model.MeasurementId, Model.AvailableMeasurements, T("Admin.Products.Products.Measurements"))
+                @Html.ValidationMessageFor(model => model.MeasurementId)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Published)
+                @Html.ProjectCheckBoxFor(model => model.Published)
+                @Html.ValidationMessageFor(model => model.Published)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.DisplayOrder)
+                @Html.ProjectTextBoxFor(model => model.DisplayOrder)
+                @Html.ValidationMessageFor(model => model.DisplayOrder)
+            </div>
+            @if (Model.Id > 0)
+            {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CreatedOnUtc)
+                    @Html.ProjectDisplayFor(model => model.CreatedOnUtc)
+                    @Html.ValidationMessageFor(model => model.CreatedOnUtc)
+                </div>
+            }
+            <div class="form-group">
+                @Html.LabelFor(model => model.AdminComment)
+                @Html.ProjectTextAreaFor(model => model.AdminComment)
+                @Html.ValidationMessageFor(model => model.AdminComment)
+            </div>
+        </div>
+    </div>
+}
+
+@helper BoxPrices()
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Price)
+                @Html.ProjectTextBoxFor(model => model.Price)
+                @Html.ValidationMessageFor(model => model.Price)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.OldPrice)
+                @Html.ProjectTextBoxFor(model => model.OldPrice)
+                @Html.ValidationMessageFor(model => model.OldPrice)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.ProductCost)
+                @Html.ProjectTextBoxFor(model => model.ProductCost)
+                @Html.ValidationMessageFor(model => model.ProductCost)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsTaxExempt)
+                @Html.ProjectCheckBoxFor(model => model.IsTaxExempt)
+                @Html.ValidationMessageFor(model => model.IsTaxExempt)
+            </div>
+        </div>
+    </div>
+}
+
+@helper BoxInventory()
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.InventoryMethodId)
+                @Html.ProjectDropDownListFor(model => model.InventoryMethodId, EnumHelper.GetSelectList(typeof(ManageInventoryMethod)).ToLocalizedSelectList(), T("Admin.Products.Products.InventoryMethodList"))
+                @Html.ValidationMessageFor(model => model.InventoryMethodId)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.StockQuantity)
+                @Html.ProjectTextBoxFor(model => model.StockQuantity)
+                @Html.ValidationMessageFor(model => model.StockQuantity)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.LowStockActivityId)
+                @Html.ProjectDropDownListFor(model => model.LowStockActivityId, EnumHelper.GetSelectList(typeof(LowStockActivity)).ToLocalizedSelectList(), T("Admin.Products.Products.LowStockActivities"))
+                @Html.ValidationMessageFor(model => model.LowStockActivityId)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.NotifyAdminForQuantityBelow)
+                @Html.ProjectTextBoxFor(model => model.NotifyAdminForQuantityBelow)
+                @Html.ValidationMessageFor(model => model.NotifyAdminForQuantityBelow)
+            </div>
+        </div>
+    </div>
+}
+<script>
+        $(document).ready(function () {
+            var required = $('#@(Html.FieldIdFor(model => model.CategoryIds))').kendoMultiSelect({ autoBind: false}).data("kendoMultiSelect");
+            required.value([@(string.Join(",",Model.CategoryIds))]);
+        });
+</script>
